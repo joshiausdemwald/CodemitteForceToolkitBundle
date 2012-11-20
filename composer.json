@@ -12,8 +12,9 @@
         }
     ],
     "require": {
+        "php" : ">5.3.6",
         "symfony/framework-bundle": ">=2.1,<2.2-dev",
-        "codemitte/force-toolkit": "v1.0.x"
+        "codemitte/force-toolkit": "dev-master"
     },
     "autoload": {
         "psr-0": {
