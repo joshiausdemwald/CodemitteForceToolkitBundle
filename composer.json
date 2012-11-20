@@ -1,0 +1,24 @@
+{
+    "name":        "codemitte/force-toolkit-bundle",
+    "type":        "symfony-bundle",
+    "description": "Easily integrate Force.com Toolkit for PHP 5.3 into your symfony 2.1 project",
+    "keywords":    ["force.com", "salesforce"],
+    "homepage":    "https://github.com/joshiausdemwald/CodemitteForceToolkitBundle",
+    "license":     "MIT",
+    "authors": [
+        {
+            "name": "Johannes Heinen",
+            "homepage": "https://github.com/joshiausdemwald"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": ">=2.1,<2.2-dev",
+        "codemitte/force-toolkit": "v1.0.x"
+    },
+    "autoload": {
+        "psr-0": {
+            "Codemitte\\Bundle\\ForceToolkitBundle": ""
+        }
+    },
+    "target-dir": "Codemitte/Bundle/ForceTookitBundle"
+}
