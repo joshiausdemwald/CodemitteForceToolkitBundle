@@ -54,7 +54,7 @@ By composer/packagist (recommended)
 
    If you face problems, refer to the official [composer documentation]. Remark the required whitelist entry when using .phar-files with a php executable that has ext/suhosin enabled!
 
-3. Enable the freshly downloaded bundle to your Kernel PHP file (usually to find in app/AppKernel.php):
+3. Enable the freshly downloaded bundle in your Kernel PHP file (usually located in app/AppKernel.php):
 
    ```php
    class AppKernel extends Kernel
@@ -179,9 +179,9 @@ Basic usage of the client/query builder
 
 src/AcmeBundle/Controller/DefaultController.php
 ```php
-/** @var $client Codemitte\\ForceToolkit\\Soap\\Client\\PartnerClient
+/** @var $client Codemitte\ForceToolkit\Soap\Client\PartnerClient */
 $client = $this->get('codemitte_forcetk.client');
-/** @var $accounts Codemitte
+/** @var $response Codemitte\Soap\Mapping\GenericResult */
 $response = $client->query('SELECT Id, Name FROM Account LIMIT 10');
 foreach($response['result']['records'] AS $account)
 {
@@ -210,8 +210,9 @@ src/AcmeBundle/Controller/AccountController.php
 ```php
 public function showAccountAction($id)
 {
-  /** @var $queryBuilder Codemitte\ForceToolkit\Soql\Builder\QueryBuilder
+  /** @var $queryBuilder Codemitte\ForceToolkit\Soql\Builder\QueryBuilder */
   $queryBuilder = $this->get('codemitte_forcetk.query_builder');
+  /** @var $account Codemitte\Soap\Mapping\GenericResult */
   $account = $queryBuilder->prepareStatement('SELECT Id, Name FROM Account WHERE Id = :id')->bind(array(
     'id' => $id
   ))->fetchOne();
@@ -231,10 +232,10 @@ src/AcmeBundle/Controller/AccountController.php
 ```php
 public function showAccountAction($limit = 20, $offset = 0, $orderBy = 'Name')
 {
-  /** @var $queryBuilder Codemitte\ForceToolkit\Soql\Builder\QueryBuilder
+  /** @var $queryBuilder Codemitte\ForceToolkit\Soql\Builder\QueryBuilder */
   $queryBuilder = $this->get('codemitte_forcetk.query_builder');
-  
   // MAXIMUM OFFSET IS 2000!!!
+  /** @var $accounts Codemitte\Soap\Mapping\GenericResultCollection */
   $accounts = $queryBuilder->prepareStatement('SELECT Id, Name FROM Account')->orderBy($orderBy)->limit($limit)->offset($offset)->fetch();
   return $this->render('AcmeBundle:Account:show.html.twig', array(
     'accounts' => $accounts
