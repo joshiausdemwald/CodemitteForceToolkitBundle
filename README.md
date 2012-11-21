@@ -117,6 +117,7 @@ Configuration
 =============
 The bundle provides a Configuration class which defines the schema of all config keys you may use in your config.yml (xml|php) files, as usual. The full schema is:
 
+app/config/config.yml
 ```yaml
 codemitte_force_toolkit:
   soap_api_client:
@@ -138,6 +139,7 @@ codemitte_force_toolkit:
 
 A minimal configuration may look like this:
 
+app/config/config.yml
 ```yaml
 codemitte_force_toolkit:
   soap_api_client:
@@ -208,7 +210,7 @@ $client->query() is a low-level API method for fireing SOQL queries against the 
 
 src/AcmeBundle/Controller/AccountController.php
 ```php
-public function showAccountAction($id)
+public function accountShowAction($id)
 {
   /** @var $queryBuilder Codemitte\ForceToolkit\Soql\Builder\QueryBuilder */
   $queryBuilder = $this->get('codemitte_forcetk.query_builder');
@@ -230,14 +232,14 @@ Analogously, the account list view:
 
 src/AcmeBundle/Controller/AccountController.php
 ```php
-public function showAccountAction($limit = 20, $offset = 0, $orderBy = 'Name')
+public function accountListAction($limit = 20, $offset = 0, $orderBy = 'Name')
 {
   /** @var $queryBuilder Codemitte\ForceToolkit\Soql\Builder\QueryBuilder */
   $queryBuilder = $this->get('codemitte_forcetk.query_builder');
   // MAXIMUM OFFSET IS 2000!!!
   /** @var $accounts Codemitte\Soap\Mapping\GenericResultCollection */
   $accounts = $queryBuilder->prepareStatement('SELECT Id, Name FROM Account')->orderBy($orderBy)->limit($limit)->offset($offset)->fetch();
-  return $this->render('AcmeBundle:Account:show.html.twig', array(
+  return $this->render('AcmeBundle:Account:list.html.twig', array(
     'accounts' => $accounts
   );
 }
@@ -246,7 +248,70 @@ Please refer to the query builder interface for further information.
 
 The form component
 ------------------
-[... more to come ... ]
+You may register salesforce types as usual, but instead of using the standard symfony 2 form types, you can utilize special [Force.com] types. These types take only a few mandatory parameters, namely
+* sobject type
+* the field name
+* an optional record type id
+
+Other well-known options like "required", "choices", etc. are also available, because each [Force.com] form type extend standard [symfony 2] types!
+
+Example:
+
+src/AcmeBundle/Type/AccountEditType.php
+
+```php
+<?php
+namespace AcmeBundle\Type\EditAccountType;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+/**
+ * Contact type for rendering a registration form.
+ */
+class EditAccountType extends AbstractType
+{
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param array $options
+     * @return void
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        parent::buildForm($builder, $options);
+
+        $builder->add('billingCountry', 'forcetk_picklist', array(
+            'sobject_type' => 'Account',
+            'fieldname' => 'AccountSource',
+            'recordtype_id' => $options['accountRecordTypeId']
+        ));
+    }
+
+    /**
+     * Returns the name of this type.
+     *
+     * @return string The name of this type
+     */
+    function getName()
+    {
+        return 'edit_account';
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+
+        $resolver
+        ->setRequired(array('accountRecordTypeId'))
+        ->setAllowedTypes(array('accountRecordTypeId' => array('null', 'string')))
+        ->setDefaults(array(
+            'data_class' => 'Codemitte\Bundle\UserBundle\Validator\EditAccountValidator',
+            'accountRecordTypeId' => null
+        ));
+    }
+}
+```
 
   [Force.com]: http://force.com
   [CodemitteForceToolkit]: https://github.com/joshiausdemwald/Force.com-Toolkit-for-PHP-5.3
