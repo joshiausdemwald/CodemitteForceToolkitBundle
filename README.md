@@ -173,6 +173,15 @@ Configuration options explained
   The cache location (currently in file system only) -- refactoring candidate!!
 * metadata.cache_ttl: The lifetime of the metadata cache until it is about to invalidate. -1 means the cache does never expire.                                                     
 
+For using the [Force.com] symfony form types in your twig templates, consider enabling the following global form template extension:
+
+```yaml
+twig:
+    form:
+        resources:
+            - 'CodemitteForceToolkitBundle:Form:fields.html.twig'
+```
+
 Documentation
 =============
 
@@ -255,7 +264,16 @@ You may register salesforce types as usual, but instead of using the standard sy
 
 Other well-known options like "required", "choices", etc. are also available, because each [Force.com] form type extend standard [symfony 2] types!
 
-Example:
+NOTE: For using the force_tk widgets you have to enable a globale custom form template in your config.yml twig section:
+
+```yaml
+twig:
+    form:
+        resources:
+            - 'CodemitteForceToolkitBundle:Form:fields.html.twig'
+```
+
+Example for building a [Force.com] enabled form type:
 
 src/AcmeBundle/Type/AccountEditType.php
 
@@ -311,6 +329,29 @@ class EditAccountType extends AbstractType
         ));
     }
 }
+```
+
+For [Force.com] form types, the bundle comes with some built-in validators you may use in your validation models. For example, consider this account represenation:
+
+```php
+<?php
+namespace Codemitte\Bundle\UserBundle\Validator;
+
+use
+    Symfony\Component\Validator\Constraints AS Assert,
+    Codemitte\ForceToolkit\Validator\Constraints AS AssertForce
+;
+
+class EditAccountValidator
+{
+    /**
+     * @var string
+     * @Assert\NotBlank
+     * @AssertForce\Picklist(sObjectType="Account", fieldname="AccountSource")
+     */
+    public $billingCountry;
+    
+    [...]
 ```
 
   [Force.com]: http://force.com
