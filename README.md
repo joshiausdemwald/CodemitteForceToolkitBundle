@@ -354,6 +354,8 @@ class EditAccountValidator
     [...]
 ```
 
+There is yet no full documentation about [Force.com] validators + form types available, so please refer to the validator's sourcecode and/or services.xml of the bundle (Resources/config/services.xml), there you will find the full list of available form types including their aliases (the alias is the token which enables the "short address" in form builders, namely for instance "forcetk_picklist", "forcetk_date" and so on.
+
   [Force.com]: http://force.com
   [CodemitteForceToolkit]: https://github.com/joshiausdemwald/Force.com-Toolkit-for-PHP-5.3
   [CodemitteSoap library]: https://github.com/joshiausdemwald/CodemitteSoap
