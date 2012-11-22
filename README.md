@@ -2,7 +2,7 @@ Introduction
 ============
 CodemitteForceToolkitBundle is a [Symfony 2] bundle to integrate Force.com Toolkit for PHP 5.3 into your [Symfony 2] project. Simply enable the bundle, configure SOAP access to your salesforce organisation and start working.
 
-THIS BUNDLE AND IT'S LIBRARY DEPENDENCIES IS STILL SUBJECT OF HEAVY DEVELOPMENT AND SHOULD NOT BY CONSIDERED STABLE! DONT USE IT IN PRODUCTION UNTIL YOU REALLY NOW WHAT YOU'RE DOING (though i don't in every circumstances.)
+THIS BUNDLE AND IT'S LIBRARY DEPENDENCIES ARE STILL SUBJECT OF HEAVY DEVELOPMENT AND SHOULD NOT BE CONSIDERED STABLE! DONT USE IT IN PRODUCTION UNTIL YOU REALLY NOW WHAT YOU'RE DOING (though i don't in every circumstances.)
 
 This bundle is part of a multi-tenant self service portal application currently developed by the company i work for and will recieve updates/backports from time-to-time, but there is no "official release schedule".
 
