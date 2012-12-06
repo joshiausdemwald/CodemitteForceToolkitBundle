@@ -1,5 +1,17 @@
+Updates
+=======
+
+2012-12-06
+----------
+
+- Added support for Salesforce.com API Version 26.0 (beta) features
+  - Now supports GEOLOCATION(), DISTANCE() SOQL functions
+  - No supports conditional SELECT fieldlist statements (SELECT [...] TYPEOF sobjectName WHEN type THEN [fieldlist] END)
+- Additional unit tests for the underlying Force.com Toolkit For PHP 5.3 library
+
 Introduction
 ============
+
 CodemitteForceToolkitBundle is a [Symfony 2] bundle to integrate Force.com Toolkit for PHP 5.3 into your [Symfony 2] project. Simply enable the bundle, configure SOAP access to your salesforce organisation and start working.
 
 THIS BUNDLE AND IT'S LIBRARY DEPENDENCIES ARE STILL SUBJECT OF HEAVY DEVELOPMENT AND SHOULD NOT BE CONSIDERED STABLE! DONT USE IT IN PRODUCTION UNTIL YOU REALLY NOW WHAT YOU'RE DOING (though i don't in every circumstances.)
@@ -13,6 +25,7 @@ In the meanwhile, some other, rather popular libraries arised, perhaps you want 
 
 Features
 ========
+
 * SOAP client abstraction layer through [CodemitteSoap library]
   * SOAP API: partner.wsdl.xml, enterprise.wsdl.xml
   * Metadata API: Use .describeX()-Methods to fetch metadata information
@@ -253,18 +266,74 @@ public function accountListAction($limit = 20, $offset = 0, $orderBy = 'Name')
   );
 }
 ```
+
+QueryBuilder Reference
+----------------------
+
+Basic query to select a collection of sobjects:
+
+```php
+$queryBuilder
+    ->select('Id, AccountNumber, Email')
+    ->from('Account')
+    ->fetch()
+;
+```
+
+Basic query to select a single sobject instance:
+
+```php
+$queryBuilder
+    ->select('Id, AccountNumber, Name')
+    ->from('Account')
+    ->where('Id = :id', array('id' => $id))
+    ->fetchOne();
+;
+```
+
+Query with compound WHERE clause (useful for building filters, for instance):
+
+```php
+$builder
+    ->select('Id, AccountNumber, Name')
+    ->from('Account')
+    ->where(
+        $builder
+            ->whereExpr()
+                ->xpr('Id', '=', ':id')
+                ->andXpr
+                (
+                    $builder
+                        ->whereExpr()
+                            ->xpr('Name', '=', "'Supercompany'")
+                            ->orXpr('AccountNumber', '=', "'12345'")
+                ),
+        array('id' => $id)
+    )
+    ->getSoql();
+    
+```
+
+This query should result in an output like:
+
+```SQL
+SELECT Id, AccountNumber, Name FROM Account WHERE Id = 'xxxxxxxxxxxxxxxxxx' AND (Name = 'Supercompany' OR AccountNumber = '12345'
+```
+
+
 Please refer to the query builder interface for further information.
 
 The form component
 ------------------
 You may register salesforce types as usual, but instead of using the standard symfony 2 form types, you can utilize special [Force.com] types. These types take only a few mandatory parameters, namely
+
 * sobject type
 * the field name
 * an optional record type id
 
 Other well-known options like "required", "choices", etc. are also available, because each [Force.com] form type extend standard [symfony 2] types!
 
-NOTE: For using the force_tk widgets you have to enable a globale custom form template in your config.yml twig section:
+NOTE: For using the force_tk widgets you have to enable a global custom form template in your config.yml twig section:
 
 ```yaml
 twig:
