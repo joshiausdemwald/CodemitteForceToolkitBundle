@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="codemitte_forcetk.metadata.file_cache.class">Codemitte\ForceToolkit\Metadata\Cache\MetadataFileCache</parameter>
+        <parameter key="codemitte_forcetk.metadata.apc_cache.class">Codemitte\ForceToolkit\Metadata\Cache\MetadataAPCCache</parameter>
         <parameter key="codemitte_forcetk.metadata.array_cache.class">Codemitte\ForceToolkit\Metadata\Cache\MetadataArrayCache</parameter>
         <parameter key="codemitte_forcetk.metadata.describe_sobject.factory.class">Codemitte\ForceToolkit\Metadata\DescribeSobjectFactory</parameter>
         <parameter key="codemitte_forcetk.metadata.describe_layout.factory.class">Codemitte\ForceToolkit\Metadata\DescribeLayoutFactory</parameter>
@@ -105,6 +106,9 @@
             <argument type="string">%codemitte_forcetk.metadata.cache.ttl%</argument>
         </service>
 
+        <service id="codemitte_forcetk.metadata.apc_cache" class="%codemitte_forcetk.metadata.apc_cache.class%">
+            <argument type="string">%codemitte_forcetk.metadata.cache.ttl%</argument>
+        </service>
 
         <service id="codemitte_forcetk.metadata.describe_sobject.factory" class="%codemitte_forcetk.metadata.describe_sobject.factory.class%">
             <argument type="service" id="codemitte_forcetk.client" />
