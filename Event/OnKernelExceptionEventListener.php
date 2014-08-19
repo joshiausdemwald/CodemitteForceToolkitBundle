@@ -55,15 +55,12 @@ class OnKernelExceptionEventListener
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        if(
-            HttpKernel::MASTER_REQUEST === $event->getRequestType() &&
-            $event->getException() instanceof TracedSoapFault)
+        if(HttpKernel::MASTER_REQUEST === $event->getRequestType())
         {
-            /** @var $e TracedSoapFault */
             $e = $event->getException();
 
             // SESSION ID INVALID
-            if(0 === strpos($e->getMessage(), 'INVALID_SESSION_ID'))
+            if($e instanceof \SoapFault && 0 === strpos($e->getMessage(), 'INVALID_SESSION_ID'))
             {
                 $request = $event->getRequest();
 
