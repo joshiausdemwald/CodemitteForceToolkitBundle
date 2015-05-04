@@ -57,6 +57,7 @@ class CodemitteForceToolkitExtension extends Extension
         $container->setParameter('codemitte_forcetk.client.service_location', $config['soap_api_client']['service_location']);
         $container->setParameter('codemitte_forcetk.client.wsdl_location', $config['soap_api_client']['wsdl_location']);
         $container->setParameter('codemitte_forcetk.client.connection_ttl', $config['soap_api_client']['connection_ttl']);
+        $container->setParameter('codemitte_forcetk.client.storage_namespace', $config['soap_api_client']['storage_namespace']);
 
         $loader->load('services.xml');
 

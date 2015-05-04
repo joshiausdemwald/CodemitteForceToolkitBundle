@@ -62,7 +62,9 @@
                     />
         </service>
 
-        <service id="codemitte_forcetk.connection_storage" class="%codemitte_forcetk.connection_storage.class%" />
+        <service id="codemitte_forcetk.connection_storage" class="%codemitte_forcetk.connection_storage.class%">
+            <argument type="string">%codemitte_forcetk.client.storage_namespace%</argument>
+        </service>
 
         <service
                 id="codemitte_forcetk.connection_factory"

@@ -58,6 +58,7 @@ class Configuration
                         ->scalarNode('connection_ttl')->defaultValue(28800)->end()
                         ->scalarNode('service_location')->defaultNull()->end()
                         ->scalarNode('wsdl_location')->isRequired()->end()
+                        ->scalarNode('storage_namespace')->isRequired()->end()
                         ->arrayNode('api_users')
                             ->isRequired()
                             ->children()
