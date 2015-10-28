@@ -55,6 +55,8 @@
         <!-- REACTS TO SESSION/CONNECTION TIMEOUTS -->
         <service id="codemitte_forcetk.onkernelexceptionevent_listener" class="%codemitte_forcetk.onkernelexceptionevent_listener.class%">
             <argument type="service" id="codemitte_forcetk.connection_storage" />
+            <argument>%codemitte_forcetk.client.maintenance_location%</argument>
+            <argument>%codemitte_forcetk.client.maintenance_template%</argument>
             <tag
                     name="kernel.event_listener"
                     event="kernel.exception"
@@ -71,6 +73,12 @@
                 class="%codemitte_forcetk.connection_factory.class%"
         >
             <argument type="service" id="codemitte_forcetk.connection_storage" />
+            <argument type="service" id="mailer" />
+            <argument>%codemitte_forcetk.client.login_attempt_limits%</argument>
+            <argument>%codemitte_forcetk.client.notification_email_from%</argument>
+            <argument>%codemitte_forcetk.client.notification_email_to%</argument>
+            <argument>%codemitte_forcetk.client.notification_email_subject%</argument>
+            <argument>%codemitte_forcetk.client.notification_email_body%</argument>
             <argument>%codemitte_forcetk.client.connection_ttl%</argument>
             <argument>%codemitte_forcetk.client.default_api_user%</argument>
             <argument>%codemitte_forcetk.client.api_users%</argument>

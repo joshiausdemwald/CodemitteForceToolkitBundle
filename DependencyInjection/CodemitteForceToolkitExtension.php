@@ -57,6 +57,13 @@ class CodemitteForceToolkitExtension extends Extension
         $container->setParameter('codemitte_forcetk.client.service_location', $config['soap_api_client']['service_location']);
         $container->setParameter('codemitte_forcetk.client.wsdl_location', $config['soap_api_client']['wsdl_location']);
         $container->setParameter('codemitte_forcetk.client.connection_ttl', $config['soap_api_client']['connection_ttl']);
+        $container->setParameter('codemitte_forcetk.client.login_attempt_limits', $config['soap_api_client']['login_attempt_limits']);
+        $container->setParameter('codemitte_forcetk.client.notification_email_from', $config['soap_api_client']['notification_email_from']);
+        $container->setParameter('codemitte_forcetk.client.notification_email_to', $config['soap_api_client']['notification_email_to']);
+        $container->setParameter('codemitte_forcetk.client.notification_email_subject', $config['soap_api_client']['notification_email_subject']);
+        $container->setParameter('codemitte_forcetk.client.notification_email_body', $config['soap_api_client']['notification_email_body']);
+        $container->setParameter('codemitte_forcetk.client.maintenance_location', $config['soap_api_client']['maintenance_location']);
+        $container->setParameter('codemitte_forcetk.client.maintenance_template', $config['soap_api_client']['maintenance_template']);
         $container->setParameter('codemitte_forcetk.client.storage_namespace', $config['soap_api_client']['storage_namespace']);
 
         $loader->load('services.xml');

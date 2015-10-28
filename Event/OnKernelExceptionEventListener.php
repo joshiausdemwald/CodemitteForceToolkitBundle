@@ -28,6 +28,7 @@ use
     Symfony\Component\HttpFoundation\RedirectResponse,
     Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent,
     Codemitte\ForceToolkit\Soap\Client\Connection\Storage\StorageInterface,
+    Codemitte\ForceToolkit\Soap\Client\ClientDisabledException,
     Codemitte\Soap\Client\Connection\TracedSoapFault
 ;
 
@@ -42,11 +43,25 @@ class OnKernelExceptionEventListener
     private $connectionStorage;
 
     /**
-     * @param \Codemitte\ForceToolkit\Soap\Client\Connection\Storage\StorageInterface $connectionStorage
+     * @var String
      */
-    public function __construct(StorageInterface $connectionStorage)
+    private $maintenanceLocation;
+
+    /**
+     * @var String
+     */
+    private $maintenanceTemplate;
+
+    /**
+     * @param \Codemitte\ForceToolkit\Soap\Client\Connection\Storage\StorageInterface $connectionStorage
+     * @param String $maintenanceLocation
+     * @param String $maintenanceTemplate
+     */
+    public function __construct(StorageInterface $connectionStorage, $maintenanceLocation, $maintenanceTemplate)
     {
         $this->connectionStorage = $connectionStorage;
+        $this->maintenanceLocation = $maintenanceLocation;
+        $this->maintenanceTemplate = $maintenanceTemplate;
     }
 
     /**
@@ -55,12 +70,29 @@ class OnKernelExceptionEventListener
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
+
         if(HttpKernel::MASTER_REQUEST === $event->getRequestType())
         {
+
             $e = $event->getException();
 
+            //Show maintenance page
+            if( $e instanceof ClientDisabledException)
+            {
+                // Create Response object
+                $response = new Response();
+
+                // create twig environement (non symfony)
+                $loader = new \Twig_Loader_Filesystem($this->maintenanceLocation);
+                $twig = new \Twig_Environment($loader);
+
+                $response->setContent($twig->render($this->maintenanceTemplate));
+                $response->setStatusCode(503);
+
+                $event->setResponse($response);
+            }
             // SESSION ID INVALID
-            if($e instanceof \SoapFault && 0 === strpos($e->getMessage(), 'INVALID_SESSION_ID'))
+            else if($e instanceof \SoapFault && 0 === strpos($e->getMessage(), 'INVALID_SESSION_ID'))
             {
                 $request = $event->getRequest();
 
