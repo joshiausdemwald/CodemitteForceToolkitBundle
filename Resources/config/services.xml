@@ -75,6 +75,7 @@
             <argument type="service" id="codemitte_forcetk.connection_storage" />
             <argument type="service" id="mailer" />
             <argument>%codemitte_forcetk.client.login_attempt_limits%</argument>
+            <argument>%codemitte_forcetk.client.storage_namespace%</argument>
             <argument>%codemitte_forcetk.client.notification_email_from%</argument>
             <argument>%codemitte_forcetk.client.notification_email_to%</argument>
             <argument>%codemitte_forcetk.client.notification_email_subject%</argument>
